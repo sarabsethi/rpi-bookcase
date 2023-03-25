@@ -40,8 +40,3 @@ inky_display.show()
 # Write the currently showing image file to file
 with open(current_img_txt_f, 'w') as f:
     f.write(new_book_cover_f)
-
-# If asked for in args, shut down device
-if shutdown_after_change:
-    time.sleep(60)
-    call("sudo reboot", shell=True)
