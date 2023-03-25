@@ -1,30 +1,47 @@
-#!/usr/bin/env python3
-
 import os
 from PIL import Image
 from inky.auto import auto
-import numpy as np
+import argparse
+from subprocess import call
+import time 
+import os
+import random 
 
-# Get the current path
-PATH = os.path.dirname(__file__)
+current_img_txt_f = '/home/pi/current_img.txt'
+book_covers_dir = 'book_covers' 
 
-# Set up the Inky display
-try:
-    inky_display = auto(ask_user=True, verbose=True)
-except TypeError:
-    raise TypeError("You need to update the Inky library to >= v1.1.0")
+# Get command line argument of whether to shutdown or not
+parser = argparse.ArgumentParser(description='Process some integers.')
+parser.add_argument('--shutdown', default=False, type=bool, help='Shutdown after changing picture')
+args = parser.parse_args()
+shutdown_after_change = args.shutdown
 
-try:
-    inky_display.set_border(inky_display.BLACK)
-except NotImplementedError:
-    pass
+# Get last shown image
+current_img_f = ''
+if os.path.exists(current_img_txt_f):
+    with open(current_img_txt_f) as f:
+        current_img_f = f.readlines()[0]
+        print('Current image showing is: {}'.format(current_img_f))
 
-img = Image.open(os.path.join(PATH, "goldfinch_800_480.png"))
-print(img.size)
+# Get list of all book covers and randomly choose a new one
+all_book_covers = os.listdir(book_covers_dir)
+all_book_covers = [b for b in all_book_covers if b != current_img_f]
+print('Choosing randomly from: {}'.format(all_book_covers))
+new_book_cover_f = random.choice(all_book_covers)
+
+# Set up inky display and show new image
+print('Setting image to {}'.format(new_book_cover_f))
+inky_display = auto(ask_user=False, verbose=True)
+img = Image.open(os.path.join(book_covers_dir, new_book_cover_f))
 img = img.transpose(Image.ROTATE_90)
-print(img.size)
-
-#img = img.resize(inky_display.resolution)
-
 inky_display.set_image(img)
 inky_display.show()
+
+# Write the currently showing image file to file
+with open(current_img_txt_f, 'w') as f:
+    f.write(new_book_cover_f)
+
+# If asked for in args, shut down device
+if shutdown_after_change:
+    time.sleep(60)
+    call("sudo halt", shell=True)
