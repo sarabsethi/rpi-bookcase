@@ -44,4 +44,4 @@ with open(current_img_txt_f, 'w') as f:
 # If asked for in args, shut down device
 if shutdown_after_change:
     time.sleep(60)
-    call("sudo halt", shell=True)
+    call("sudo reboot", shell=True)
