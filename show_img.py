@@ -27,7 +27,7 @@ new_book_cover_f = random.choice(all_book_covers)
 # Load full size image and downsize to thumbnail that will fit in screen
 img = Image.open(os.path.join(book_covers_dir, new_book_cover_f))
 desired_sz = screen_pix_w, screen_pix_h
-img.thumbnail(desired_sz, Image.Resampling.LANCZOS)
+img.thumbnail(desired_sz, Image.LANCZOS)
 
 # Copy thumbnail to image with correct screen dimensions to add border
 new_size = (screen_pix_w, screen_pix_h)
