@@ -11,6 +11,9 @@ book_covers_dir = 'book-covers-full-res'
 screen_pix_h = 800
 screen_pix_w = 480
 
+usable_pix_h = 733
+usable_pix_w = 456
+
 # Get last shown image
 current_img_f = ''
 if os.path.exists(current_img_txt_f):
@@ -26,13 +29,13 @@ new_book_cover_f = random.choice(all_book_covers)
 
 # Load full size image and downsize to thumbnail that will fit in screen
 img = Image.open(os.path.join(book_covers_dir, new_book_cover_f))
-desired_sz = screen_pix_w, screen_pix_h
+desired_sz = usable_pix_w, usable_pix_h
 img.thumbnail(desired_sz, Image.LANCZOS)
 
 # Copy thumbnail to image with correct screen dimensions to add border
-new_size = (screen_pix_w, screen_pix_h)
-final_img = Image.new("RGB", new_size, "White")  
-box = tuple((n - o) // 2 for n, o in zip(new_size, img.size))
+screen_size = (screen_pix_w, screen_pix_h)
+final_img = Image.new("RGB", screen_size, "White")  
+box = tuple((n - o) // 2 for n, o in zip(screen_size, img.size))
 final_img.paste(img, box)
 
 # Set up inky display and show new image
