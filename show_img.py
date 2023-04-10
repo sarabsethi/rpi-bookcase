@@ -11,8 +11,8 @@ book_covers_dir = 'book-covers-full-res'
 screen_pix_h = 800
 screen_pix_w = 480
 
-usable_pix_h = 733
-usable_pix_w = 456
+usable_pix_h = 742
+usable_pix_w = 461
 
 # Get last shown image
 current_img_f = ''
@@ -36,7 +36,8 @@ img.thumbnail(desired_sz, Image.LANCZOS)
 screen_size = (screen_pix_w, screen_pix_h)
 final_img = Image.new("RGB", screen_size, "White")  
 box = tuple((n - o) // 2 for n, o in zip(screen_size, img.size))
-final_img.paste(img, box)
+offset_box = tuple((max(box[0]-6, 0), box[1]+3))
+final_img.paste(img, offset_box)
 
 # Set up inky display and show new image
 print('Setting image to {}'.format(new_book_cover_f))
