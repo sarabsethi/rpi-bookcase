@@ -3,6 +3,7 @@ from PIL import Image
 from inky.auto import auto
 import os
 import random 
+from datetime import datetime
 
 current_img_txt_f = '/home/pi/current_img.txt'
 
@@ -25,6 +26,7 @@ if os.path.exists(current_img_txt_f):
 all_book_covers = os.listdir(book_covers_dir)
 all_book_covers = [b for b in all_book_covers if b != current_img_f]
 print('Choosing randomly from: {}'.format(all_book_covers))
+random.seed(datetime.now())
 new_book_cover_f = random.choice(all_book_covers)
 
 # Load full size image and downsize to thumbnail that will fit in screen
